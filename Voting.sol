@@ -17,7 +17,7 @@ contract Voting {
     //voter dynamic array
     Voter[] public voters;
     
-    uint256 total_votes_casted;
+    uint256 public total_votes_casted;
     
     mapping(address => Voter) public address_to_voter;
     mapping(address => Candidate) public address_to_candidate;
@@ -45,6 +45,8 @@ contract Voting {
             if(keccak256(abi.encodePacked(candidates[i].name)) == keccak256(abi.encodePacked(_name)) && candidates[i].candidate_address == msg.sender){
                 ispresent = true;
             }
+            
+            i++;
         }
         
         require(ispresent == false);
@@ -71,6 +73,8 @@ contract Voting {
             if(keccak256(abi.encodePacked(voters[i].name)) == keccak256(abi.encodePacked(_name)) && voters[i].voter_address == msg.sender){
                 ispresent = true;
             }
+            
+            i++;
         }
         
         require(ispresent == false);
@@ -99,6 +103,8 @@ contract Voting {
             if(candidates[j].candidate_address == _candidate_address){
                 iscandidatepresent = true;
             }
+            
+            j++;
         }
         
         require(iscandidatepresent == true);
@@ -110,6 +116,8 @@ contract Voting {
             if(voters[i].voter_address == msg.sender){
                 isvoterpresent = true;
             }
+            
+            i++;
         }
         
         require(isvoterpresent == true);
@@ -130,21 +138,19 @@ contract Voting {
         //setting new voter data
         address_to_voter[msg.sender] = voter;
         
-        declareWinner();
+        total_votes_casted++;
         
-    }
-    
-    function declareWinner() private {
-        uint256 i;
+        uint256 k;
         uint256 max_votes;
         address winner;
-        while(i < total_candidates){
-            if(candidates[i].votes > max_votes){
-                winner = candidates[i].candidate_address;
+        while(k < total_candidates){
+            if(candidates[k].votes > max_votes){
+                winner = candidates[k].candidate_address;
             }
         }
         
         winner_candidate = winner;
+        
     }
-    
+  
 }
